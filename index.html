@@ -24,7 +24,6 @@
       <p>Por supuesto, necesitamos que escribas <strong>la misma</strong> en los tres campos :)</p>
     </div>
 
-
     <div class="col-md-6 col-md-offset-3">
       <div class="alert alert-warning">
         <strong>&iexcl;Cuidado!</strong> Las contrase&ntilde;as estar&aacute;n visibles todo el tiempo.
@@ -64,20 +63,23 @@
     $(".js-gather").on('keyup', function(e) {
 
       var me = $(this);
+      var keyPressed = e.which;
 
-      console.log(e.which)
-      if (e.which == 8) {
+      if (keyPressed == 8) {
         me.val('');
         me.data('time', '');
       }
 
-      var time = me.data('time');
-      if (!time) {
-        me.data('time', Date.now());
-      } else {
-        me.data('time', time + ',' + Date.now());
+      if ((65 <= keyPressed && keyPressed <= 90) ||
+          (48 <= keyPressed && keyPressed <= 57)) {
+        var time = me.data('time');
+        if (!time) {
+          me.data('time', Date.now());
+        } else {
+          me.data('time', time + ',' + Date.now());
+        }
       }
-    })
+    });
 
     $.fn.exists = function() {
       return this.length !== 0;
@@ -90,7 +92,8 @@
       } else {
         $(this).parent().removeClass('has-error');
       }
-    })
+    });
+
     $(".btn").on('click', function(){
       if (!$("#uno").val()) {
         alert("No hay muestra que enviar");
@@ -105,7 +108,8 @@
       $("#uno-times").val($("#uno").data('time'));
       $("#dos-times").val($("#dos").data('time'));
       $("#tres-times").val($("#tres").data('time'));
-    })
+    });
+
   </script>
 </body>
 </html>
