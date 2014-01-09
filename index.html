@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css">
+  <link rel="stylesheet" href="stylesheets/styles.css">
+  <title>cadence authentication spike :: wecode.io</title>
+</head>
+<body>
+
+  <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <div class="navbar-header">
+        <a class="navbar-brand" href="#">
+          cadence authentication spike <small>by wecode.io</small>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+
+    <div class="starter-template">
+      <p class="lead">Ante todo, gracias por tu tiempo. Estamos llevando a cabo un experimento, y necesitamos pedirte que escribas normalmente una contrase&ntilde;a (idealmente inventada) en cada uno de los tres campos que ves a continuaci&oacute;n.</p>
+      <p>Por supuesto, necesitamos que escribas <strong>la misma</strong> en los tres campos :)</p>
+    </div>
+
+
+    <div class="col-md-6 col-md-offset-3">
+      <div class="alert alert-warning">
+        <strong>&iexcl;Cuidado!</strong> Las contrase&ntilde;as estar&aacute;n visibles todo el tiempo.
+      </div>
+      <form role="form">
+        <div class="form-group">
+          <label for="uno">Primera vez</label>
+          <input class="form-control js-gather" id="uno" name="uno">
+          <input type="hidden" id="uno-times" name="uno-times"/>
+        </div>
+        <div class="form-group">
+          <label for="dos">Segunda vez</label>
+          <input class="form-control js-validate js-gather" id="dos" name="dos">
+          <input type="hidden" id="dos-times" name="dos-times"/>
+        </div>
+        <div class="form-group">
+          <label for="tres">Tercera vez</label>
+          <input class="form-control js-validate js-gather" id="tres" name="tres">
+          <input type="hidden" id="tres-times" name="tres-times"/>
+        </div>
+        <div class="form-group">
+          <label for="email">Opcional: correo electr&oacute;nico</label>
+          <input class="form-control" id="email" name="email">
+        </div>
+        <button type="submit" class="btn btn-primary btn-large pull-right">
+          <i class="glyphicon glyphicon-send"></i>&nbsp;
+          Enviar muestra al laboratorio
+        </button>
+      </form>
+    </div>
+  </div><!-- /.container -->
+
+  <script src="https://code.jquery.com/jquery.js"></script>
+  <script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
+  <script type="text/javascript">
+
+    $(".js-gather").on('keyup', function(e) {
+
+      var me = $(this);
+
+      console.log(e.which)
+      if (e.which == 8) {
+        me.val('');
+        me.data('time', '');
+      }
+
+      var time = me.data('time');
+      if (!time) {
+        me.data('time', Date.now());
+      } else {
+        me.data('time', time + ',' + Date.now());
+      }
+    })
+
+    $.fn.exists = function() {
+      return this.length !== 0;
+    }
+    $(".js-validate").on('blur', function() {
+      var reference = $("#uno").val();
+      var value = $(this).val();
+      if (reference != value) {
+        $(this).parent().addClass('has-error');
+      } else {
+        $(this).parent().removeClass('has-error');
+      }
+    })
+    $(".btn").on('click', function(){
+      if (!$("#uno").val()) {
+        alert("No hay muestra que enviar");
+        return false;
+      }
+      $(".js-validate").trigger("blur");
+      if ($(".has-error").exists()) {
+        alert("No podemos enviar la muestra porque los tres valores no coinciden");
+        return false;
+      }
+
+      $("#uno-times").val($("#uno").data('time'));
+      $("#dos-times").val($("#dos").data('time'));
+      $("#tres-times").val($("#tres").data('time'));
+    })
+  </script>
+</body>
+</html>
